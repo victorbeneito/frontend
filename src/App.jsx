@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
+import CategoryPage from "./pages/CategoryPage";
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -11,6 +13,9 @@ function App() {
     return false;
   });
 
+  const [categories, setCategories] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -21,12 +26,45 @@ function App() {
     }
   }, [darkMode]);
 
+  useEffect(() => {
+    fetch("http://localhost:3000/categorias")
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setCategories(data);
+        else if (Array.isArray(data.categorias)) setCategories(data.categorias);
+        else setCategories([]);
+      })
+      .catch(() => setCategories([]));
+  }, []);
+
+  function handleSearch(query) {
+    setSearchQuery(query);
+  }
+
   return (
-    <div className="bg-fondo dark:bg-darkBg min-h-screen transition-colors duration-500">
-      {/* Pasamos darkMode y setDarkMode a Home */}
-      <Home darkMode={darkMode} setDarkMode={setDarkMode} />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Home
+              darkMode={darkMode}
+              setDarkMode={setDarkMode}
+              categories={categories}
+              onSearch={handleSearch}
+              searchQuery={searchQuery}
+            />
+          }
+        />
+        <Route
+          path="/categoria/:id"
+          element={<CategoryPage darkMode={darkMode} setDarkMode={setDarkMode} categories={categories} />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
 export default App;
+
+

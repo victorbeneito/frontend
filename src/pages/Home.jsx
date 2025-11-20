@@ -9,46 +9,45 @@ import SeoText from "../components/SeoText";
 import SubscribeForm from "../components/SubscribeForm";
 import Footer from "../components/Footer";
 
-export default function Home({ darkMode, setDarkMode }) {
+export default function Home({ darkMode, setDarkMode, categories, onSearch, searchQuery }) {
   const [productosDestacados, setProductosDestacados] = useState([]);
   const [productosFiltrados, setProductosFiltrados] = useState([]);
   const [busquedaActiva, setBusquedaActiva] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:3000/productos")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.ok) {
-          setProductosDestacados(data.productos);
-          setProductosFiltrados([]);
-          setBusquedaActiva(false);
-        }
-      })
-      .catch((error) => console.error("Error fetching productos:", error));
-  }, []);
-
-  function handleSearch(query) {
-    if (!query.trim()) {
-      setBusquedaActiva(false);
-      setProductosFiltrados([]);
-      return;
+    if (!searchQuery.trim()) {
+      fetch("http://localhost:3000/productos")
+        .then(res => res.json())
+        .then(data => {
+          if (data.ok) {
+            setProductosDestacados(data.productos);
+            setProductosFiltrados([]);
+            setBusquedaActiva(false);
+          }
+        })
+        .catch((error) => console.error("Error fetching productos:", error));
+    } else {
+      fetch(`http://localhost:3000/productos?q=${encodeURIComponent(searchQuery)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.ok) {
+            setProductosFiltrados(data.productos);
+            setBusquedaActiva(true);
+          }
+        })
+        .catch((error) => console.error("Error fetching productos:", error));
     }
-    setBusquedaActiva(true);
-
-    fetch(`http://localhost:3000/productos?q=${encodeURIComponent(query)}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.ok) {
-          setProductosFiltrados(data.productos);
-        }
-      })
-      .catch((error) => console.error("Error fetching productos:", error));
-  }
+  }, [searchQuery]);
 
   return (
-    <div className="bg-fondoPage dark:darkBg min-h-screen transition-colors duration-500 text-black dark:text-white">
+    <div className="bg-fondoPage dark:bg-darkBg min-h-screen transition-colors duration-500 text-black dark:text-white">
       <Header />
-      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} onSearch={handleSearch} />
+      <Navbar
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        categories={categories}
+        onSearch={onSearch}
+      />
       <main className="container mx-auto px-6">
         <Banner />
         <BannerPrincipal />
