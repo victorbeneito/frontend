@@ -25,7 +25,7 @@ export default function Home({ darkMode, setDarkMode, categories, onSearch, sear
             setBusquedaActiva(false);
           }
         })
-        .catch((error) => console.error("Error fetching productos:", error));
+        .catch(error => console.error("Error fetching productos:", error));
     } else {
       fetch(`http://localhost:3000/productos?q=${encodeURIComponent(searchQuery)}`)
         .then(res => res.json())
@@ -35,7 +35,7 @@ export default function Home({ darkMode, setDarkMode, categories, onSearch, sear
             setBusquedaActiva(true);
           }
         })
-        .catch((error) => console.error("Error fetching productos:", error));
+        .catch(error => console.error("Error fetching productos:", error));
     }
   }, [searchQuery]);
 
@@ -47,16 +47,19 @@ export default function Home({ darkMode, setDarkMode, categories, onSearch, sear
         setDarkMode={setDarkMode}
         categories={categories}
         onSearch={onSearch}
+        searchQuery={searchQuery}
       />
       <main className="container mx-auto px-6">
         <Banner />
-        <BannerPrincipal />
+        {/* Pasamos categories para que BannerPrincipal navegue */}
+        <BannerPrincipal categories={categories} />
         <ProductGrid
           productosDestacados={productosDestacados}
           productosFiltrados={productosFiltrados}
           busquedaActiva={busquedaActiva}
         />
-        <BannersSection />
+        {/* Pasamos categories para que BannersSection navegue */}
+        <BannersSection categories={categories} />
         <SeoText />
         <SubscribeForm />
       </main>
