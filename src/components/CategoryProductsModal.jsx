@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import clienteAxios from './config/axiosClient';
 
 export default function CategoryProductsModal({ categories }) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -22,29 +23,37 @@ export default function CategoryProductsModal({ categories }) {
     const ids = categoriasBanner[categoriaClave];
 
     try {
-      let url = "";
+      let endpoint = ""; // He cambiado el nombre de 'url' a 'endpoint' para que tenga más sentido, pero puedes usar 'url'
+
       if (Array.isArray(ids)) {
-        // Para las categorías agrupadas (Ropa de cama) filtramos por varios ids => backend debe soportar esto
-        // Suponemos backend acepta varios ids separados por coma: ?categoria=ID1,ID2,ID3
-        url = `http://localhost:3000/productos?categoria=${ids.join(",")}`;
+        // 1. CAMBIO: Quitamos 'http://localhost:3000'
+        // Dejamos solo la ruta y los parámetros
+        endpoint = `/productos?categoria=${ids.join(",")}`;
       } else {
-        url = `http://localhost:3000/productos?categoria=${ids}`;
+        // 1. CAMBIO: Lo mismo aquí
+        endpoint = `/productos?categoria=${ids}`;
       }
 
-      const res = await fetch(url);
-      const data = await res.json();
+      // 2. CAMBIO: Usamos clienteAxios
+      // Axios ya convierte la respuesta a JSON automáticamente
+      const respuesta = await clienteAxios.get(endpoint);
+      const data = respuesta.data; 
+
+      // 3. El resto de tu lógica se mantiene igual
+      // Asumo que tu backend devuelve un objeto { ok: true, productos: [...] }
       if (data.ok) {
         setProductos(data.productos);
       } else {
         setProductos([]);
       }
       setModalOpen(true);
+
     } catch (error) {
       console.error("Error al cargar productos:", error);
       setProductos([]);
       setModalOpen(true);
     }
-  }
+}
 
   function closeModal() {
     setModalOpen(false);

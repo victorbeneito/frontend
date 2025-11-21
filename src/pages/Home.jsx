@@ -8,6 +8,7 @@ import BannerPrincipal from "../components/BannerPrincipal";
 import SeoText from "../components/SeoText";
 import SubscribeForm from "../components/SubscribeForm";
 import Footer from "../components/Footer";
+import clienteAxios from '../config/axiosClient';
 
 export default function Home({ darkMode, setDarkMode, categories, onSearch, searchQuery }) {
   const [productosDestacados, setProductosDestacados] = useState([]);
@@ -15,29 +16,43 @@ export default function Home({ darkMode, setDarkMode, categories, onSearch, sear
   const [busquedaActiva, setBusquedaActiva] = useState(false);
 
   useEffect(() => {
-    if (!searchQuery.trim()) {
-      fetch("http://localhost:3000/productos")
-        .then(res => res.json())
-        .then(data => {
+    // Creamos una función asíncrona interna para poder usar await
+    const buscarProductos = async () => {
+      try {
+        // CASO 1: Si NO hay texto en la búsqueda
+        if (!searchQuery.trim()) {
+          
+          // CAMBIO: Usamos clienteAxios.get('/productos') sin localhost
+          const { data } = await clienteAxios.get("/productos");
+
           if (data.ok) {
             setProductosDestacados(data.productos);
             setProductosFiltrados([]);
             setBusquedaActiva(false);
           }
-        })
-        .catch(error => console.error("Error fetching productos:", error));
-    } else {
-      fetch(`http://localhost:3000/productos?q=${encodeURIComponent(searchQuery)}`)
-        .then(res => res.json())
-        .then(data => {
+
+        } else {
+          // CASO 2: Si SÍ hay texto (Búsqueda activa)
+          
+          // CAMBIO: Construimos la URL relativa con el parámetro q
+          // encodeURIComponent es importante mantenerlo para caracteres especiales
+          const { data } = await clienteAxios.get(`/productos?q=${encodeURIComponent(searchQuery)}`);
+
           if (data.ok) {
             setProductosFiltrados(data.productos);
             setBusquedaActiva(true);
           }
-        })
-        .catch(error => console.error("Error fetching productos:", error));
-    }
-  }, [searchQuery]);
+        }
+      } catch (error) {
+        console.error("Error fetching productos:", error);
+        // Aquí podrías añadir un estado de error si quisieras mostrar un mensaje al usuario
+      }
+    };
+
+    // Ejecutamos la función
+    buscarProductos();
+
+}, [searchQuery]);
 
   return (
     <div className="bg-fondoPage dark:bg-darkBg min-h-screen transition-colors duration-500 text-black dark:text-white">
