@@ -55,7 +55,7 @@ export default function Home({ darkMode, setDarkMode, categories, onSearch, sear
 }, [searchQuery]);
 
   return (
-    <div className="bg-fondoPage dark:bg-darkBg min-h-screen transition-colors duration-500 text-black dark:text-white">
+    <div className="bg-fondo dark:bg-darkBg min-h-screen transition-colors duration-500 text-black dark:text-white">
       <Header />
       <Navbar
         darkMode={darkMode}

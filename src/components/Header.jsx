@@ -1,6 +1,6 @@
 export default function Header() {
   return (
-    <header className="p-8 flex items-center justify-between">
+    <header className="bg-fondo dark:bg-darkBg p-8 flex items-center justify-between">
       {/* Logo para modo normal */}
       <img
         src="/img/logo-hogar-claro.jpg"
