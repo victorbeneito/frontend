@@ -6,8 +6,8 @@ export default function CategoryProductsModal({ categories }) {
   const [productos, setProductos] = useState([]);
   const [categoriaNombre, setCategoriaNombre] = useState("");
 
-  // Mapea las categorías visibles en los banners con sus ids backend (u objetos nombre)
-  // Para "Ropa de cama" lista ids de varias categorías
+  // Mapea les categories visibles en els banners en els ids del backend(u objecte nombre)
+  // Per a "Ropa de cama" lista ids de varies categoríes
   const categoriasBanner = {
     "Estores Digitales": categories.find(c => c.nombre === "Estores Digitales")?._id,
     "Estores Lisos": categories.find(c => c.nombre === "Estores Lisos")?._id,
@@ -23,24 +23,20 @@ export default function CategoryProductsModal({ categories }) {
     const ids = categoriasBanner[categoriaClave];
 
     try {
-      let endpoint = ""; // He cambiado el nombre de 'url' a 'endpoint' para que tenga más sentido, pero puedes usar 'url'
+      let endpoint = "";
 
       if (Array.isArray(ids)) {
-        // 1. CAMBIO: Quitamos 'http://localhost:3000'
-        // Dejamos solo la ruta y los parámetros
-        endpoint = `/productos?categoria=${ids.join(",")}`;
+               endpoint = `/productos?categoria=${ids.join(",")}`;
       } else {
-        // 1. CAMBIO: Lo mismo aquí
+        
         endpoint = `/productos?categoria=${ids}`;
       }
-
-      // 2. CAMBIO: Usamos clienteAxios
-      // Axios ya convierte la respuesta a JSON automáticamente
+     
+      // Axios ja convertix la resposta a JSON automàticament 
       const respuesta = await clienteAxios.get(endpoint);
       const data = respuesta.data; 
 
-      // 3. El resto de tu lógica se mantiene igual
-      // Asumo que tu backend devuelve un objeto { ok: true, productos: [...] }
+      // El backend deu tornar un objete
       if (data.ok) {
         setProductos(data.productos);
       } else {

@@ -18,16 +18,7 @@ export default function CategoryPage({ darkMode, setDarkMode, categories }) {
     async function fetchProductsByCategory() {
       try {
         setLoading(true);
-
-        // 2. CAMBIO: 
-        // - Usamos clienteAxios.get
-        // - Quitamos 'http://localhost:3000'
-        // - Dejamos solo la ruta y el parámetro dinámico
         const res = await clienteAxios.get(`/productos?categoria=${id}`);
-        
-        // 3. CAMBIO: 
-        // - Ya no necesitamos await res.json()
-        // - Los datos están directamente en res.data
         const data = res.data;
 
         if (data.ok) {
@@ -43,7 +34,7 @@ export default function CategoryPage({ darkMode, setDarkMode, categories }) {
       }
     }
     
-    if (id) { // Es buena práctica verificar que 'id' existe antes de llamar
+    if (id) { 
         fetchProductsByCategory();
     }
 }, [id]);

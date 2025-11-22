@@ -16,13 +16,12 @@ export default function Home({ darkMode, setDarkMode, categories, onSearch, sear
   const [busquedaActiva, setBusquedaActiva] = useState(false);
 
   useEffect(() => {
-    // Creamos una función asíncrona interna para poder usar await
+    // Creem una funció asíncrona interna per a poder utilitzar await 
     const buscarProductos = async () => {
       try {
-        // CASO 1: Si NO hay texto en la búsqueda
+        // CAS 1: Si NO hi ha text en la busqueda
         if (!searchQuery.trim()) {
           
-          // CAMBIO: Usamos clienteAxios.get('/productos') sin localhost
           const { data } = await clienteAxios.get("/productos");
 
           if (data.ok) {
@@ -32,10 +31,7 @@ export default function Home({ darkMode, setDarkMode, categories, onSearch, sear
           }
 
         } else {
-          // CASO 2: Si SÍ hay texto (Búsqueda activa)
-          
-          // CAMBIO: Construimos la URL relativa con el parámetro q
-          // encodeURIComponent es importante mantenerlo para caracteres especiales
+          // CAS 2: Si SÍ hi ha text en la busqueda
           const { data } = await clienteAxios.get(`/productos?q=${encodeURIComponent(searchQuery)}`);
 
           if (data.ok) {
@@ -45,11 +41,9 @@ export default function Home({ darkMode, setDarkMode, categories, onSearch, sear
         }
       } catch (error) {
         console.error("Error fetching productos:", error);
-        // Aquí podrías añadir un estado de error si quisieras mostrar un mensaje al usuario
-      }
+              }
     };
 
-    // Ejecutamos la función
     buscarProductos();
 
 }, [searchQuery]);
@@ -66,14 +60,14 @@ export default function Home({ darkMode, setDarkMode, categories, onSearch, sear
       />
       <main className="container mx-auto px-6">
         <Banner />
-        {/* Pasamos categories para que BannerPrincipal navegue */}
+        {/* Pasem categories per a que BannerPrincipal navegue */}
         <BannerPrincipal categories={categories} />
         <ProductGrid
           productosDestacados={productosDestacados}
           productosFiltrados={productosFiltrados}
           busquedaActiva={busquedaActiva}
         />
-        {/* Pasamos categories para que BannersSection navegue */}
+        {/* Pasem categories per a que BannersSection navegue */}
         <BannersSection categories={categories} />
         <SeoText />
         <SubscribeForm />

@@ -10,14 +10,13 @@ export default function SubscribeForm() {
     setMessage("");
     setError("");
 
-    // Validación simple email
+    // Validació simple email
     if (!email || !email.includes("@")) {
       setError("Por favor, introduce un correo válido.");
       return;
     }
 
-    // Aquí harías la lógica real de envío al backend o servicio externo
-    // Por ahora simulamos éxito
+    //Ací aniria llógica real al enviament del backend de moment simulem exit
     setMessage("Gracias por suscribirte!");
     setEmail("");
   };

@@ -3,11 +3,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import CategoryPage from "./pages/CategoryPage";
 
-// 1. IMPORTANTE: Te faltaba esta línea. Ajusta la ruta si tu carpeta config está en otro lado.
+
 import clientAxios from "./config/axiosClient"; 
 
-export default function App() { // 2. Solo declaramos la función una vez aquí
-  // --- ESTADO: DARK MODE ---
+export default function App() { 
+  // --- ESTAT: DARK MODE ---
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("theme");
@@ -17,11 +17,11 @@ export default function App() { // 2. Solo declaramos la función una vez aquí
     return false;
   });
 
-  // --- ESTADO: DATOS ---
+  // --- ESTADO: DADES ---
   const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // --- EFFECT 1: GESTIÓN DEL DARK MODE ---
+  // --- EFFECT 1: GESTIÓ DEL DARK MODE ---
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -32,11 +32,10 @@ export default function App() { // 2. Solo declaramos la función una vez aquí
     }
   }, [darkMode]);
 
-  // --- EFFECT 2: CARGA DE CATEGORÍAS (TU NUEVO CÓDIGO) ---
+  // --- EFFECT 2: CARREGA DE CATEGORÍES
   useEffect(() => {
     const obtenerCategorias = async () => {
       try {
-        // Usamos clientAxios (ya sin http://localhost...)
         const respuesta = await clientAxios.get("/categorias");
         const data = respuesta.data; 
 

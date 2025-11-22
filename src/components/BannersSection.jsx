@@ -6,7 +6,7 @@ export default function BannersSection({ categories = [] }) {
   function irCategoriaPorNombre(nombreCategoria) {
     if (!categories || categories.length === 0) return;
 
-    // Buscamos la categoría actualizando para que ignore mayúsculas y espacios.
+    // Busquem la categoria actulitzan per a que ignore majuscules i espais
     const categoria = categories.find(
       c => c.nombre.trim().toLowerCase() === nombreCategoria.trim().toLowerCase()
     );
